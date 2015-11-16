@@ -1,0 +1,26 @@
+{
+  "name": "rollup-stream",
+  "version": "1.0.0",
+  "description": "A wrapper around Rollup that returns a stream instead of a Promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/permutatrix/rollup-stream.git"
+  },
+  "keywords": [
+    "rollup",
+    "gulpfriendly"
+  ],
+  "author": "Permutator <permutatorem@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/permutatrix/rollup-stream/issues"
+  },
+  "homepage": "https://github.com/permutatrix/rollup-stream#readme",
+  "dependencies": {
+    "rollup": "^0.21.0"
+  }
+}
