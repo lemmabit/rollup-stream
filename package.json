@@ -1,6 +1,6 @@
 {
   "name": "rollup-stream",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A wrapper around Rollup that returns a stream instead of a Promise",
   "main": "index.js",
   "scripts": {
