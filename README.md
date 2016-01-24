@@ -15,8 +15,10 @@ var gulp = require('gulp'),
 
 gulp.task('rollup', function() {
   return rollup({entry: './src/main.js'})
+
     // give the file the name you want to output with.
     .pipe(source('app.js'))
+
     // and output to ./dist/app.js as normal.
     .pipe(gulp.dest('./dist'));
 });
@@ -27,21 +29,30 @@ gulp.task('rollup', function() {
 var gulp = require('gulp'),
     rollup = require('rollup-stream'),
     sourcemaps = require('gulp-sourcemaps'),
+//  rename = require('gulp-rename'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer');
 
 gulp.task('rollup', function() {
   return rollup({entry: './src/main.js', sourceMap: true})
+
     // point to the entry file.
-    // if you want to output with a different name, rename it at the end using gulp-rename.
     .pipe(source('main.js', './src'))
+
     // buffer the output. most gulp plugins, including gulp-sourcemaps, don't support streams.
     .pipe(buffer())
+
     // tell gulp-sourcemaps to load the inline sourcemap produced by rollup-stream.
     .pipe(sourcemaps.init({loadMaps: true}))
+
         // transform the code further here.
+
+    // if you want to output with a different name from the input file, use gulp-rename here.
+//  .pipe(rename('index.js'))
+
     // write the sourcemap alongside the output file.
     .pipe(sourcemaps.write('.'))
+
     // and output to ./dist/main.js as normal.
     .pipe(gulp.dest('./dist'));
 });
