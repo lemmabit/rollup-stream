@@ -57,6 +57,16 @@ describe("rollup-stream", function() {
       expect(data).to.equal('fake code');
     });
   });
+  
+  it("shouldn't raise an alarm when options.rollup is passed", function() {
+    return collect(rollup({entry: './entry.js', rollup: require('rollup'), plugins: [{
+      load: function() {
+        return 'console.log("Hello, World!");';
+      }
+    }]})).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
+    });
+  });
 });
 
 describe("sourcemaps", function() {

@@ -4,7 +4,13 @@ module.exports = function rollupStream(options) {
   var stream = new Readable();
   stream._read = function() {  };
   
-  var rollup = (options && options.rollup) || require('rollup');
+  var rollup = options && options.rollup;
+  if(options && 'rollup' in options) {
+    delete options.rollup;
+  }
+  if(!rollup) {
+    rollup = require('rollup');
+  }
   
   rollup.rollup(options).then(function(bundle) {
     bundle = bundle.generate(options);
