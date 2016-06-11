@@ -38,6 +38,25 @@ describe("rollup-stream", function() {
       done(Error("No error was emitted."));
     });
   });
+  
+  it("should use a custom Rollup if options.rollup is passed", function() {
+    var options = {
+      rollup: {
+        rollup: function(options) {
+          expect(options).to.equal(options);
+          return Promise.resolve({
+            generate: function(options) {
+              expect(options).to.equal(options);
+              return { code: 'fake code' };
+            }
+          });
+        }
+      }
+    };
+    return collect(rollup(options)).then(function(data) {
+      expect(data).to.equal('fake code');
+    });
+  });
 });
 
 describe("sourcemaps", function() {
