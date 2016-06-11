@@ -14,7 +14,9 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream');
 
 gulp.task('rollup', function() {
-  return rollup({entry: './src/main.js'})
+  return rollup({
+      entry: './src/main.js'
+    })
 
     // give the file the name you want to output with.
     .pipe(source('app.js'))
@@ -34,7 +36,10 @@ var gulp = require('gulp'),
     buffer = require('vinyl-buffer');
 
 gulp.task('rollup', function() {
-  return rollup({entry: './src/main.js', sourceMap: true})
+  return rollup({
+      entry: './src/main.js',
+      sourceMap: true
+    })
 
     // point to the entry file.
     .pipe(source('main.js', './src'))
@@ -65,7 +70,10 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream');
 
 gulp.task('rollup', function() {
-  return rollup({entry: './src/main.js', rollup: require('rollup')})
+  return rollup({
+      entry: './src/main.js',
+      rollup: require('rollup')
+    })
 
     // after passing options.rollup, proceed as normal.
     .pipe(source('app.js'))
