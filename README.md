@@ -58,6 +58,21 @@ gulp.task('rollup', function() {
 });
 ```
 
+## Usage with newer, older, or custom Rollup
+```js
+var gulp = require('gulp'),
+    rollup = require('rollup-stream'),
+    source = require('vinyl-source-stream');
+
+gulp.task('rollup', function() {
+  return rollup({entry: './src/main.js', rollup: require('rollup')})
+
+    // after passing options.rollup, proceed as normal.
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
 
 [npm-url]: https://npmjs.org/package/rollup-stream
 [npm-image]: https://img.shields.io/npm/v/rollup-stream.svg
