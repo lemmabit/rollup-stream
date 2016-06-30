@@ -59,11 +59,15 @@ describe("rollup-stream", function() {
   });
   
   it("shouldn't raise an alarm when options.rollup is passed", function() {
-    return collect(rollup({entry: './entry.js', rollup: require('rollup'), plugins: [{
-      load: function() {
-        return 'console.log("Hello, World!");';
-      }
-    }]})).then(function(data) {
+    return collect(rollup({
+      entry: './entry.js',
+      rollup: require('rollup'),
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        }
+      }]
+    })).then(function(data) {
       expect(data).to.have.string('Hello, World!');
     });
   });
@@ -71,21 +75,28 @@ describe("rollup-stream", function() {
 
 describe("sourcemaps", function() {
   it("should be added when options.sourceMap is true", function() {
-    return collect(rollup({entry: './entry.js', sourceMap: true, plugins: [{
-      load: function() {
-        return 'console.log("Hello, World!");';
-      }
-    }]})).then(function(data) {
+    return collect(rollup({
+      entry: './entry.js',
+      sourceMap: true,
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        }
+      }]
+    })).then(function(data) {
       expect(data).to.have.string('\n//# sourceMappingURL=data:application/json;');
     });
   });
   
   it("should not be added otherwise", function() {
-    return collect(rollup({entry: './entry.js', plugins: [{
-      load: function() {
-        return 'console.log("Hello, World!");';
-      }
-    }]})).then(function(data) {
+    return collect(rollup({
+      entry: './entry.js',
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        }
+      }]
+    })).then(function(data) {
       expect(data).to.not.have.string('//# sourceMappingURL=');
     });
   });
