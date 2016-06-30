@@ -81,6 +81,19 @@ gulp.task('rollup', function() {
 });
 ```
 
+## Usage with Rollup config file
+```js
+var gulp = require('gulp'),
+    rollup = require('rollup-stream'),
+    source = require('vinyl-source-stream');
+
+gulp.task('rollup', function() {
+  return rollup('rollup.config.js')
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
 
 [npm-url]: https://npmjs.org/package/rollup-stream
 [npm-image]: https://img.shields.io/npm/v/rollup-stream.svg
