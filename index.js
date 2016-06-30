@@ -38,11 +38,18 @@ module.exports = function rollupStream(options) {
     });
   }
   
-  options.then(function(options) {
-    var rollup = (options && options.rollup) || require('rollup');
-    if(options && 'rollup' in options) {
-      delete options.rollup;
+  options.then(function(options0) {
+    var options;
+    if(options0) {
+      options = {};
+      for(var key in options0) {
+        if(key !== 'rollup') {
+          options[key] = options0[key];
+        }
+      }
     }
+    
+    var rollup = (options0 && options0.rollup) || require('rollup');
     
     return rollup.rollup(options).then(function(bundle) {
       bundle = bundle.generate(options);
