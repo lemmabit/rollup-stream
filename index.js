@@ -8,9 +8,9 @@ module.exports = function rollupStream(options) {
   if(typeof options !== 'string') {
     options = Promise.resolve(options);
   } else {
-    options = path.resolve(options);
+    var optionsPath = path.resolve(options);
     options = require('rollup').rollup({
-      entry: options,
+      entry: optionsPath,
       onwarn: function(message) {
         if(!/Treating .+ as external dependency/.test(message)) {
           console.error(message);
@@ -23,7 +23,7 @@ module.exports = function rollupStream(options) {
       var defaultLoader = require.extensions['.js'];
       
       require.extensions['.js'] = function(m, filename) {
-        if(filename === options) {
+        if(filename === optionsPath) {
           m._compile(code, filename);
         } else {
           defaultLoader(m, filename);
@@ -31,7 +31,7 @@ module.exports = function rollupStream(options) {
       };
       
       try {
-        return require(options);
+        return require(optionsPath);
       } finally {
         require.extensions['.js'] = defaultLoader;
       }

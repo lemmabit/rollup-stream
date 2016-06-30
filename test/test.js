@@ -71,6 +71,23 @@ describe("rollup-stream", function() {
       expect(data).to.have.string('Hello, World!');
     });
   });
+  
+  it("should import config from the specified file if options is a string", function() {
+    return collect(rollup('test/fixtures/config.js')).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
+    });
+  });
+  
+  it("should reject with any error thrown by the config file", function() {
+    var s = rollup('test/fixtures/throws.js');
+    s.on('error', function(err) {
+      expect(err.message).to.include("bah! humbug");
+      done();
+    });
+    s.on('data', function() {
+      done(Error("No error was emitted."));
+    });
+  });
 });
 
 describe("sourcemaps", function() {
