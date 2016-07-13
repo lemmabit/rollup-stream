@@ -27,5 +27,11 @@
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
     "rollup-plugin-hypothetical": "^1.0.1"
-  }
+  },
+  "files": [
+    "index.js",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ]
 }
