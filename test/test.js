@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var rollup = require('..');
 var Readable = require('stream').Readable;
-
+var hypothetical = require('rollup-plugin-hypothetical');
 
 function collect(stream) {
   return new Promise(function(resolve, reject) {
@@ -28,6 +28,17 @@ describe("rollup-stream", function() {
     expect(rollup()).to.be.an.instanceof(Readable);
   });
   
+  it("should emit an error if options isn't passed", function(done) {
+    var s = rollup();
+    s.on('error', function(err) {
+      expect(err.message).to.equal("options must be an object or a string!");
+      done();
+    });
+    s.on('data', function() {
+      done(Error("No error was emitted."));
+    });
+  });
+  
   it("should emit an error if options.entry isn't present", function(done) {
     var s = rollup({});
     s.on('error', function(err) {
@@ -36,6 +47,23 @@ describe("rollup-stream", function() {
     });
     s.on('data', function() {
       done(Error("No error was emitted."));
+    });
+  });
+  
+  it("should take a snapshot of options when the function is called", function() {
+    var options = {
+      entry: './entry.js',
+      plugins: [hypothetical({
+        files: {
+          './entry.js': 'import x from "./x.js"; console.log(x);',
+          './x.js': 'export default "Hello, World!";'
+        }
+      })]
+    };
+    var s = rollup(options);
+    options.entry = './nonexistent.js';
+    return collect(s).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
     });
   });
   
