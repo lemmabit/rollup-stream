@@ -146,3 +146,73 @@ describe("sourcemaps", function() {
     });
   });
 });
+
+describe("cache", function() {
+  it("should not retransform when options.cache is provided", function() {
+    var firstTransforms = 0, secondTransforms = 0, cache = {};
+    return collect(rollup({
+      entry: './entry.js',
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        },
+        transform: function() {
+          ++firstTransforms;
+        }
+      }],
+      cache: cache
+    })).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
+      return collect(rollup({
+        entry: './entry.js',
+        plugins: [{
+          load: function() {
+            return 'console.log("Hello, World!");';
+          },
+          transform: function() {
+            ++secondTransforms;
+          }
+        }],
+        cache: cache
+      }));
+    }).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
+      expect(firstTransforms).to.equal(1);
+      expect(secondTransforms).to.equal(0);
+    });
+  });
+  
+  it("should transform again when options.cache is provided", function() {
+    var firstTransforms = 0, secondTransforms = 0, cache = {};
+    return collect(rollup({
+      entry: './entry.js',
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        },
+        transform: function() {
+          ++firstTransforms;
+        }
+      }],
+      cache: cache
+    })).then(function(data) {
+      expect(data).to.have.string('Hello, World!');
+      return collect(rollup({
+        entry: './entry.js',
+        plugins: [{
+          load: function() {
+            return 'console.log("Goodbye, World!");';
+          },
+          transform: function() {
+            ++secondTransforms;
+          }
+        }],
+        cache: cache
+      }));
+    }).then(function(data) {
+      expect(data).to.have.string('Goodbye, World!');
+      expect(firstTransforms).to.equal(1);
+      expect(secondTransforms).to.equal(1);
+    });
+  });
+});

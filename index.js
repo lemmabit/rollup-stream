@@ -6,6 +6,8 @@ module.exports = function rollupStream(options) {
   stream._read = function() {  };
   
   var rollup = (options && options.rollup) || require('rollup');
+  var cacheRef = (options && options.cache) || undefined;
+  var cachedBundle = cacheRef && options.cache.bundle;
   
   if(typeof options === 'object' && options !== null) {
     var options1 = {};
@@ -14,6 +16,7 @@ module.exports = function rollupStream(options) {
         options1[key] = options[key];
       }
     }
+    options1.cache = cachedBundle;
     options = Promise.resolve(options1);
   } else if(typeof options === 'string') {
     var optionsPath = path.resolve(options);
@@ -50,6 +53,10 @@ module.exports = function rollupStream(options) {
   
   options.then(function(options) {
     return rollup.rollup(options).then(function(bundle) {
+      if (cacheRef) {
+        cacheRef.bundle = bundle;
+      }
+      
       bundle = bundle.generate(options);
       var code = bundle.code, map = bundle.map;
       

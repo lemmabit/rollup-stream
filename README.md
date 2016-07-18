@@ -81,6 +81,26 @@ gulp.task('rollup', function() {
 });
 ```
 
+## Usage with bundle cache
+```js
+var gulp = require('gulp'),
+    rollup = require('rollup-stream'),
+    source = require('vinyl-source-stream');
+
+// An opaque/arbitrary object reference that will serve to store cached data between invocations.
+var cache = {};
+gulp.task('rollup', function() {
+  return rollup({
+      entry: './src/main.js',
+      cache: cache
+    })
+    
+    // after passing options.rollup, proceed as normal.
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
 ## Usage with Rollup config file
 ```js
 var gulp = require('gulp'),
