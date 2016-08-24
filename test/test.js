@@ -91,6 +91,9 @@ describe("rollup-stream", function() {
       entry: './entry.js',
       rollup: require('rollup'),
       plugins: [{
+        resolveId: function(id) {
+          return id;
+        },
         load: function() {
           return 'console.log("Hello, World!");';
         }
@@ -121,6 +124,9 @@ describe("rollup-stream", function() {
     var s = rollup({
       entry: './entry.js',
       plugins: [{
+        resolveId: function(id) {
+          return id;
+        },
         load: function() {
           return 'console.log("Hello, World!");';
         }
@@ -153,6 +159,9 @@ describe("sourcemaps", function() {
       entry: './entry.js',
       sourceMap: true,
       plugins: [{
+        resolveId: function(id) {
+          return id;
+        },
         load: function() {
           return 'console.log("Hello, World!");';
         }
@@ -166,6 +175,9 @@ describe("sourcemaps", function() {
     return collect(rollup({
       entry: './entry.js',
       plugins: [{
+        resolveId: function(id) {
+          return id;
+        },
         load: function() {
           return 'console.log("Hello, World!");';
         }
