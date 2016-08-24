@@ -63,6 +63,33 @@ gulp.task('rollup', function() {
 });
 ```
 
+## Usage with caching
+```js
+var gulp = require('gulp'),
+    rollup = require('rollup-stream'),
+    source = require('vinyl-source-stream');
+
+var cache;
+gulp.task('rollup', function() {
+  return rollup({
+      entry: './src/main.js',
+      cache: cache
+    })
+    
+    .on('bundle', function(bundle) {
+      cache = bundle;
+    })
+    
+    // after listening for the 'bundle' event, proceed as usual.
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('watch', function() {
+  gulp.watch('./src/**/*.js', ['rollup']);
+});
+```
+
 ## Usage with newer, older, or custom Rollup
 ```js
 var gulp = require('gulp'),
