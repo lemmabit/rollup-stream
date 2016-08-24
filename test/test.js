@@ -116,6 +116,35 @@ describe("rollup-stream", function() {
       done(Error("No error was emitted."));
     });
   });
+  
+  it("should emit a 'bundle' event when the bundle is output", function(done) {
+    var s = rollup({
+      entry: './entry.js',
+      plugins: [{
+        load: function() {
+          return 'console.log("Hello, World!");';
+        }
+      }]
+    });
+    var bundled = false;
+    s.on('bundle', function(bundle) {
+      bundled = true;
+      var code = bundle.generate().code;
+      if(/Hello, World!/.test(code)) {
+        done();
+      } else {
+        done(Error("The bundle doesn't contain the string \"Hello, World!\""));
+      }
+    });
+    s.on('error', function(err) {
+      done(Error(err));
+    });
+    s.on('data', function() {
+      if(!bundled) {
+        done(Error("No 'bundle' event was emitted."));
+      }
+    });
+  });
 });
 
 describe("sourcemaps", function() {

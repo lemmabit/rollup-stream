@@ -50,6 +50,8 @@ module.exports = function rollupStream(options) {
   
   options.then(function(options) {
     return rollup.rollup(options).then(function(bundle) {
+      stream.emit('bundle', bundle);
+      
       bundle = bundle.generate(options);
       var code = bundle.code, map = bundle.map;
       
