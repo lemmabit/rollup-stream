@@ -75,7 +75,7 @@ gulp.task('rollup', function() {
       rollup: require('rollup')
     })
     
-    // after passing options.rollup, proceed as normal.
+    // after passing options.rollup, proceed as usual.
     .pipe(source('app.js'))
     .pipe(gulp.dest('./dist'));
 });
