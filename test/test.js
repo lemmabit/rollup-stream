@@ -106,7 +106,7 @@ describe("rollup-stream", function() {
     });
   });
   
-  it("should reject with any error thrown by the config file", function() {
+  it("should reject with any error thrown by the config file", function(done) {
     var s = rollup('test/fixtures/throws.js');
     s.on('error', function(err) {
       expect(err.message).to.include("bah! humbug");
