@@ -7,6 +7,11 @@ The options object is passed to Rollup's rollup() and generate() methods. This
 currently works because there's no overlap between the names of the options
 those methods take. Hopefully that won't change any time soon!
 
+## Installation
+```bash
+$ npm i rollup-stream --save
+```
+
 ## Basic usage
 ```js
 var gulp = require('gulp'),
