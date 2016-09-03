@@ -9,7 +9,7 @@ those methods take. Hopefully that won't change any time soon!
 
 ## Installation
 ```bash
-$ npm i rollup-stream --save
+npm install --save-dev rollup-stream
 ```
 
 ## Basic usage
