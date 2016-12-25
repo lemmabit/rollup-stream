@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/permutatrix/rollup-stream#readme",
   "dependencies": {
-    "rollup": "^0.36.0"
+    "rollup": "^0.37.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",
