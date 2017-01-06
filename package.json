@@ -20,8 +20,8 @@
     "url": "https://github.com/permutatrix/rollup-stream/issues"
   },
   "homepage": "https://github.com/permutatrix/rollup-stream#readme",
-  "dependencies": {
-    "rollup": "^0.38.0"
+  "peerDependencies": {
+    "rollup": "^0.40.2"
   },
   "devDependencies": {
     "chai": "^3.4.1",
