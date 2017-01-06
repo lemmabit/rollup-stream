@@ -19,9 +19,9 @@ module.exports = function rollupStream(options) {
     var optionsPath = path.resolve(options);
     options = require('rollup').rollup({
       entry: optionsPath,
-      onwarn: function(message) {
-        if(!/Treating .+ as external dependency/.test(message)) {
-          console.error(message);
+      onwarn: function(warning) {
+        if(warning.code !== 'UNRESOLVED_IMPORT') {
+          console.warn(warning.message);
         }
       }
     }).then(function(bundle) {

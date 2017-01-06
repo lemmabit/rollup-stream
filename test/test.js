@@ -53,6 +53,7 @@ describe("rollup-stream", function() {
   it("should take a snapshot of options when the function is called", function() {
     var options = {
       entry: './entry.js',
+      format: 'es',
       plugins: [hypothetical({
         files: {
           './entry.js': 'import x from "./x.js"; console.log(x);',
@@ -89,6 +90,7 @@ describe("rollup-stream", function() {
   it("shouldn't raise an alarm when options.rollup is passed", function() {
     return collect(rollup({
       entry: './entry.js',
+      format: 'es',
       rollup: require('rollup'),
       plugins: [{
         resolveId: function(id) {
@@ -123,6 +125,7 @@ describe("rollup-stream", function() {
   it("should emit a 'bundle' event when the bundle is output", function(done) {
     var s = rollup({
       entry: './entry.js',
+      format: 'es',
       plugins: [{
         resolveId: function(id) {
           return id;
@@ -135,7 +138,7 @@ describe("rollup-stream", function() {
     var bundled = false;
     s.on('bundle', function(bundle) {
       bundled = true;
-      var code = bundle.generate().code;
+      var code = bundle.generate({ format: 'es' }).code;
       if(/Hello, World!/.test(code)) {
         done();
       } else {
@@ -157,6 +160,7 @@ describe("sourcemaps", function() {
   it("should be added when options.sourceMap is true", function() {
     return collect(rollup({
       entry: './entry.js',
+      format: 'es',
       sourceMap: true,
       plugins: [{
         resolveId: function(id) {
@@ -174,6 +178,7 @@ describe("sourcemaps", function() {
   it("should not be added otherwise", function() {
     return collect(rollup({
       entry: './entry.js',
+      format: 'es',
       plugins: [{
         resolveId: function(id) {
           return id;
