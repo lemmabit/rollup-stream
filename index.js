@@ -25,14 +25,14 @@ module.exports = function rollupStream(options) {
         }
       }
     }).then(function(bundle) {
-      var code = bundle.generate({ format: 'cjs' }).code;
-      
+      return bundle.generate({ format: 'cjs' });
+    }).then(function(result) {
       // don't look at me. this is how Rollup does it.
       var defaultLoader = require.extensions['.js'];
       
       require.extensions['.js'] = function(m, filename) {
         if(filename === optionsPath) {
-          m._compile(code, filename);
+          m._compile(result.code, filename);
         } else {
           defaultLoader(m, filename);
         }
@@ -50,17 +50,18 @@ module.exports = function rollupStream(options) {
   
   options.then(function(options) {
     return rollup.rollup(options).then(function(bundle) {
-      stream.emit('bundle', bundle);
-      
-      bundle = bundle.generate(options);
-      var code = bundle.code, map = bundle.map;
-      
-      stream.push(code);
-      if(options.sourceMap) {
-        stream.push('\n//# sourceMappingURL=');
-        stream.push(map.toUrl());
-      }
-      stream.push(null);
+      return bundle.generate(options).then(function(result) {
+        stream.emit('bundle', bundle);
+        
+        var code = result.code, map = result.map;
+        
+        stream.push(code);
+        if(options.sourceMap) {
+          stream.push('\n//# sourceMappingURL=');
+          stream.push(map.toUrl());
+        }
+        stream.push(null);
+      });
     });
   }).catch(function(reason) {
     setImmediate(function() {

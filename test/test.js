@@ -76,7 +76,7 @@ describe("rollup-stream", function() {
           return Promise.resolve({
             generate: function(options) {
               expect(options).to.equal(options);
-              return { code: 'fake code' };
+              return Promise.resolve({ code: 'fake code' });
             }
           });
         }
@@ -138,12 +138,13 @@ describe("rollup-stream", function() {
     var bundled = false;
     s.on('bundle', function(bundle) {
       bundled = true;
-      var code = bundle.generate({ format: 'es' }).code;
-      if(/Hello, World!/.test(code)) {
-        done();
-      } else {
-        done(Error("The bundle doesn't contain the string \"Hello, World!\""));
-      }
+      bundle.generate({ format: 'es' }).then(function(result) {
+        if(/Hello, World!/.test(result.code)) {
+          done();
+        } else {
+          done(Error("The bundle doesn't contain the string \"Hello, World!\""));
+        }
+      }).catch(done);
     });
     s.on('error', function(err) {
       done(Error(err));
