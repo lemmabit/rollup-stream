@@ -50,18 +50,18 @@ module.exports = function rollupStream(options) {
   
   options.then(function(options) {
     return rollup.rollup(options).then(function(bundle) {
-      return bundle.generate(options).then(function(result) {
-        stream.emit('bundle', bundle);
-        
-        var code = result.code, map = result.map;
-        
-        stream.push(code);
-        if(options.sourceMap) {
-          stream.push('\n//# sourceMappingURL=');
-          stream.push(map.toUrl());
-        }
-        stream.push(null);
-      });
+      stream.emit('bundle', bundle);
+      
+      return bundle.generate(options);
+    }).then(function(result) {
+      var code = result.code, map = result.map;
+      
+      stream.push(code);
+      if(options.sourceMap) {
+        stream.push('\n//# sourceMappingURL=');
+        stream.push(map.toUrl());
+      }
+      stream.push(null);
     });
   }).catch(function(reason) {
     setImmediate(function() {
