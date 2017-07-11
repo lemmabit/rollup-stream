@@ -144,7 +144,7 @@ describe("rollup-stream", function() {
         } else {
           done(Error("The bundle doesn't contain the string \"Hello, World!\""));
         }
-      }).catch(done);
+      }).catch(done.fail);
     });
     s.on('error', function(err) {
       done(Error(err));
