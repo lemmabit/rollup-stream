@@ -18,7 +18,7 @@ module.exports = function rollupStream(options) {
   } else if(typeof options === 'string') {
     var optionsPath = path.resolve(options);
     options = require('rollup').rollup({
-      entry: optionsPath,
+      input: optionsPath,
       onwarn: function(warning) {
         if(warning.code !== 'UNRESOLVED_IMPORT') {
           console.warn(warning.message);
@@ -57,7 +57,7 @@ module.exports = function rollupStream(options) {
       var code = result.code, map = result.map;
       
       stream.push(code);
-      if(options.sourceMap) {
+      if(options.sourcemap) {
         stream.push('\n//# sourceMappingURL=');
         stream.push(map.toUrl());
       }
@@ -68,6 +68,6 @@ module.exports = function rollupStream(options) {
       stream.emit('error', reason);
     });
   });
-  
+
   return stream;
 };

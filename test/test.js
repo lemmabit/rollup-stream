@@ -39,10 +39,10 @@ describe("rollup-stream", function() {
     });
   });
   
-  it("should emit an error if options.entry isn't present", function(done) {
+  it("should emit an error if options.input isn't present", function(done) {
     var s = rollup({});
     s.on('error', function(err) {
-      expect(err.message).to.equal("You must supply options.entry to rollup");
+      expect(err.message).to.equal("You must supply options.input to rollup");
       done();
     });
     s.on('data', function() {
@@ -52,7 +52,7 @@ describe("rollup-stream", function() {
   
   it("should take a snapshot of options when the function is called", function() {
     var options = {
-      entry: './entry.js',
+      input : './entry.js',
       format: 'es',
       plugins: [hypothetical({
         files: {
@@ -89,7 +89,7 @@ describe("rollup-stream", function() {
   
   it("shouldn't raise an alarm when options.rollup is passed", function() {
     return collect(rollup({
-      entry: './entry.js',
+      input : './entry.js',
       format: 'es',
       rollup: require('rollup'),
       plugins: [{
@@ -124,7 +124,7 @@ describe("rollup-stream", function() {
   
   it("should emit a 'bundle' event when the bundle is output", function(done) {
     var s = rollup({
-      entry: './entry.js',
+      input : './entry.js',
       format: 'es',
       plugins: [{
         resolveId: function(id) {
@@ -158,11 +158,11 @@ describe("rollup-stream", function() {
 });
 
 describe("sourcemaps", function() {
-  it("should be added when options.sourceMap is true", function() {
+  it("should be added when options.sourcemap is true", function() {
     return collect(rollup({
-      entry: './entry.js',
+      input: './entry.js',
       format: 'es',
-      sourceMap: true,
+      sourcemap: true,
       plugins: [{
         resolveId: function(id) {
           return id;
@@ -178,7 +178,7 @@ describe("sourcemaps", function() {
   
   it("should not be added otherwise", function() {
     return collect(rollup({
-      entry: './entry.js',
+      input: './entry.js',
       format: 'es',
       plugins: [{
         resolveId: function(id) {

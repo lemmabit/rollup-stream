@@ -1,7 +1,7 @@
 import hypothetical from 'rollup-plugin-hypothetical';
 
 export default {
-  entry: './entry.js',
+  input: './entry.js',
   format: 'es',
   plugins: [hypothetical({
     files: {

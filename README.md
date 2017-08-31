@@ -20,7 +20,7 @@ var gulp = require('gulp'),
 
 gulp.task('rollup', function() {
   return rollup({
-      entry: './src/main.js'
+      input: './src/main.js'
     })
     
     // give the file the name you want to output with.
@@ -42,7 +42,7 @@ var gulp = require('gulp'),
 
 gulp.task('rollup', function() {
   return rollup({
-      entry: './src/main.js',
+      input: './src/main.js',
       sourceMap: true
     })
     
@@ -77,7 +77,7 @@ var gulp = require('gulp'),
 var cache;
 gulp.task('rollup', function() {
   return rollup({
-      entry: './src/main.js',
+      input: './src/main.js',
       cache: cache
     })
     
@@ -103,7 +103,7 @@ var gulp = require('gulp'),
 
 gulp.task('rollup', function() {
   return rollup({
-      entry: './src/main.js',
+      input: './src/main.js',
       rollup: require('rollup')
     })
     
