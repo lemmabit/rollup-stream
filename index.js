@@ -68,6 +68,6 @@ module.exports = function rollupStream(options) {
       stream.emit('error', reason);
     });
   });
-
+  
   return stream;
 };
