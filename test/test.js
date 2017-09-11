@@ -176,6 +176,24 @@ describe("sourcemaps", function() {
     });
   });
   
+  it("should still be added when options.sourceMap is true", function() {
+    return collect(rollup({
+      input: './entry.js',
+      format: 'es',
+      sourceMap: true,
+      plugins: [{
+        resolveId: function(id) {
+          return id;
+        },
+        load: function() {
+          return 'console.log("Hello, World!");';
+        }
+      }]
+    })).then(function(data) {
+      expect(data).to.have.string('\n//# sourceMappingURL=data:application/json;');
+    });
+  });
+  
   it("should not be added otherwise", function() {
     return collect(rollup({
       input: './entry.js',
