@@ -5,20 +5,12 @@ module.exports = function rollupStream(options) {
   var stream = new Readable();
   stream._read = function() {  };
   
-  var rollup = (options && options.rollup) || require('rollup');
-  
   if(typeof options === 'object' && options !== null) {
-    var options1 = {};
-    for(var key in options) {
-      if(key !== 'rollup') {
-        options1[key] = options[key];
-      }
-    }
-    options = Promise.resolve(options1);
+    options = Promise.resolve(options);
   } else if(typeof options === 'string') {
     var optionsPath = path.resolve(options);
     options = require('rollup').rollup({
-      entry: optionsPath,
+      input: optionsPath,
       onwarn: function(warning) {
         if(warning.code !== 'UNRESOLVED_IMPORT') {
           console.warn(warning.message);
@@ -48,7 +40,28 @@ module.exports = function rollupStream(options) {
     options = Promise.reject(Error("options must be an object or a string!"));
   }
   
-  options.then(function(options) {
+  options.then(function(options0) {
+    var rollup = options0.rollup;
+    var hasCustomRollup = true;
+    if(!rollup) {
+      rollup = require('rollup');
+      hasCustomRollup = false;
+    }
+    
+    var options = {};
+    for(var key in options0) {
+      if(key === 'sourceMap' && !hasCustomRollup) {
+        console.warn(
+          "The sourceMap option has been renamed to \"sourcemap\" " +
+          "(lowercase \"m\") in Rollup. The old form is now deprecated " +
+          "in rollup-stream."
+        );
+        options.sourcemap = options0.sourceMap;
+      } else if(key !== 'rollup') {
+        options[key] = options0[key];
+      }
+    }
+    
     return rollup.rollup(options).then(function(bundle) {
       stream.emit('bundle', bundle);
       
@@ -57,7 +70,7 @@ module.exports = function rollupStream(options) {
       var code = result.code, map = result.map;
       
       stream.push(code);
-      if(options.sourceMap) {
+      if(options.sourcemap || options.sourceMap) {
         stream.push('\n//# sourceMappingURL=');
         stream.push(map.toUrl());
       }
