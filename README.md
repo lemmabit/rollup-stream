@@ -43,7 +43,7 @@ var gulp = require('gulp'),
 gulp.task('rollup', function() {
   return rollup({
       input: './src/main.js',
-      sourceMap: true
+      sourcemap: true
     })
     
     // point to the entry file.
