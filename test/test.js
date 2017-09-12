@@ -40,9 +40,24 @@ describe("rollup-stream", function() {
   });
   
   it("should emit an error if options.input isn't present", function(done) {
-    var s = rollup({});
+    var s = rollup({
+      output: {
+        format: 'es'
+      }
+    });
     s.on('error', function(err) {
       expect(err.message).to.equal("You must supply options.input to rollup");
+      done();
+    });
+    s.on('data', function() {
+      done(Error("No error was emitted."));
+    });
+  });
+  
+  it("should emit an error if options.output isn't present", function(done) {
+    var s = rollup({ input: './entry.js' });
+    s.on('error', function(err) {
+      expect(err.message).to.equal("You must specify options.output and it must be an object");
       done();
     });
     s.on('data', function() {
@@ -53,7 +68,9 @@ describe("rollup-stream", function() {
   it("should take a snapshot of options when the function is called", function() {
     var options = {
       input : './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       plugins: [hypothetical({
         files: {
           './entry.js': 'import x from "./x.js"; console.log(x);',
@@ -70,12 +87,15 @@ describe("rollup-stream", function() {
   
   it("should use a custom Rollup if options.rollup is passed", function() {
     var options = {
+      output: {
+        format: 'es'
+      },
       rollup: {
         rollup: function(options) {
-          expect(options).to.equal(options);
+          expect(options).to.eql(options);
           return Promise.resolve({
             generate: function(options) {
-              expect(options).to.equal(options);
+              expect(options).to.eql(options);
               return Promise.resolve({ code: 'fake code' });
             }
           });
@@ -90,7 +110,9 @@ describe("rollup-stream", function() {
   it("shouldn't raise an alarm when options.rollup is passed", function() {
     return collect(rollup({
       input : './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       rollup: require('rollup'),
       plugins: [{
         resolveId: function(id) {
@@ -125,7 +147,9 @@ describe("rollup-stream", function() {
   it("should emit a 'bundle' event when the bundle is output", function(done) {
     var s = rollup({
       input : './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       plugins: [{
         resolveId: function(id) {
           return id;
@@ -161,7 +185,9 @@ describe("sourcemaps", function() {
   it("should be added when options.sourcemap is true", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       sourcemap: true,
       plugins: [{
         resolveId: function(id) {
@@ -179,7 +205,9 @@ describe("sourcemaps", function() {
   it("should still be added when options.sourceMap is true", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       sourceMap: true,
       plugins: [{
         resolveId: function(id) {
@@ -197,7 +225,9 @@ describe("sourcemaps", function() {
   it("should not be added otherwise", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: {
+        format: 'es'
+      },
       plugins: [{
         resolveId: function(id) {
           return id;
