@@ -1,11 +1,27 @@
 var Readable = require('stream').Readable;
 var path = require('path');
 
+function isObject(obj) {
+  return typeof obj === 'object' && obj !== null;
+}
+
+var assign = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
+
 module.exports = function rollupStream(options) {
   var stream = new Readable();
   stream._read = function() {  };
   
-  if(typeof options === 'object' && options !== null) {
+  if(isObject(options)) {
     options = Promise.resolve(options);
   } else if(typeof options === 'string') {
     var optionsPath = path.resolve(options);
@@ -41,6 +57,10 @@ module.exports = function rollupStream(options) {
   }
   
   options.then(function(options0) {
+    if (options0.output === undefined || !isObject(options0.output)) {
+      return Promise.reject(new Error("You must specify options.output and it must be an object"));
+    }
+
     var rollup = options0.rollup;
     var hasCustomRollup = true;
     if(!rollup) {
@@ -49,6 +69,8 @@ module.exports = function rollupStream(options) {
     }
     
     var options = {};
+    var outputOptions = {};
+
     for(var key in options0) {
       if(key === 'sourceMap' && !hasCustomRollup) {
         console.warn(
@@ -56,21 +78,24 @@ module.exports = function rollupStream(options) {
           "(lowercase \"m\") in Rollup. The old form is now deprecated " +
           "in rollup-stream."
         );
-        options.sourcemap = options0.sourceMap;
+        outputOptions.sourcemap = options0.sourceMap;
       } else if(key !== 'rollup') {
         options[key] = options0[key];
+        outputOptions[key] = options0[key];
       }
     }
     
+    assign(outputOptions, options0.output);
+
     return rollup.rollup(options).then(function(bundle) {
       stream.emit('bundle', bundle);
       
-      return bundle.generate(options);
+      return bundle.generate(outputOptions);
     }).then(function(result) {
       var code = result.code, map = result.map;
       
       stream.push(code);
-      if(options.sourcemap || options.sourceMap) {
+      if(outputOptions.sourcemap) {
         stream.push('\n//# sourceMappingURL=');
         stream.push(map.toUrl());
       }
