@@ -70,7 +70,7 @@ module.exports = function rollupStream(options) {
       var code = result.code, map = result.map;
       
       stream.push(code);
-      if(options.sourcemap || options.sourceMap) {
+      if(options.sourcemap || options.sourceMap || (options.output && options.output.sourcemap)) {
         stream.push('\n//# sourceMappingURL=');
         stream.push(map.toUrl());
       }
