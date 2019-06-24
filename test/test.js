@@ -53,7 +53,7 @@ describe("rollup-stream", function() {
   it("should take a snapshot of options when the function is called", function() {
     var options = {
       input : './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       plugins: [hypothetical({
         files: {
           './entry.js': 'import x from "./x.js"; console.log(x);',
@@ -62,7 +62,7 @@ describe("rollup-stream", function() {
       })]
     };
     var s = rollup(options);
-    options.entry = './nonexistent.js';
+    options.input = './nonexistent.js';
     return collect(s).then(function(data) {
       expect(data).to.have.string('Hello, World!');
     });
@@ -90,7 +90,7 @@ describe("rollup-stream", function() {
   it("shouldn't raise an alarm when options.rollup is passed", function() {
     return collect(rollup({
       input : './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       rollup: require('rollup'),
       plugins: [{
         resolveId: function(id) {
@@ -125,7 +125,7 @@ describe("rollup-stream", function() {
   it("should emit a 'bundle' event when the bundle is output", function(done) {
     var s = rollup({
       input : './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       plugins: [{
         resolveId: function(id) {
           return id;
@@ -161,7 +161,7 @@ describe("sourcemaps", function() {
   it("should be added when options.sourcemap is true", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       sourcemap: true,
       plugins: [{
         resolveId: function(id) {
@@ -179,7 +179,7 @@ describe("sourcemaps", function() {
   it("should still be added when options.sourceMap is true", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       sourceMap: true,
       plugins: [{
         resolveId: function(id) {
@@ -197,7 +197,7 @@ describe("sourcemaps", function() {
   it("should not be added otherwise", function() {
     return collect(rollup({
       input: './entry.js',
-      format: 'es',
+      output: { format: 'es' },
       plugins: [{
         resolveId: function(id) {
           return id;

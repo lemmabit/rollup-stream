@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/permutatrix/rollup-stream#readme",
   "dependencies": {
-    "rollup": "^0.49.2"
+    "rollup": "^1.16.2"
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "mocha": "^2.3.4",
+    "mocha": "^6.1.4",
     "rollup-plugin-hypothetical": "^1.0.1"
   },
   "files": [
