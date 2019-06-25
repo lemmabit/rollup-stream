@@ -69,13 +69,17 @@ module.exports = function rollupStream(options) {
         return bundle.generate(options);
       })
       .then( result => {
-        for (const chunk of result.output) {
-          const code = chunk.code, map = chunk.map;
-          stream.push(code);
+        for (const chunkOrAsset of result.output) {
+          if (chunkOrAsset.isAsset) {
+            stream.push(chunkOrAsset.source);
+          } else {
+            const code = chunkOrAsset.code, map = chunkOrAsset.map;
+            stream.push(code);
 
-          if(options.sourcemap || options.sourceMap) {
-            stream.push('\n//# sourceMappingURL=');
-            stream.push(map.toUrl());
+            if(options.sourcemap || options.sourceMap) {
+              stream.push('\n//# sourceMappingURL=');
+              stream.push(map.toUrl());
+            }
           }
         }
 
